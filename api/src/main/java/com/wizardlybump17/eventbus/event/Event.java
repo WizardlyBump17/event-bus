@@ -1,5 +1,6 @@
 package com.wizardlybump17.eventbus.event;
 
+import com.wizardlybump17.eventbus.list.EventListenerList;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,4 +25,6 @@ public abstract class Event {
     public @Nullable String getDescription() {
         return null;
     }
+
+    public abstract @NonNull EventListenerList<? extends Event> getListenerList();
 }

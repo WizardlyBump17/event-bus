@@ -18,7 +18,10 @@ public interface EventListener<E extends Event> extends Comparable<EventListener
         return Integer.compare(other.priority(), priority());
     }
 
-    static <E extends Event> @NonNull EventListener<E> of(@NonNull Consumer<E> eventConsumer, int priority, boolean ignoreCancelled) {
+    @NonNull
+    Class<E> eventClass();
+
+    static <E extends Event> @NonNull EventListener<E> of(@NonNull Class<E> eventClass, @NonNull Consumer<E> eventConsumer, int priority, boolean ignoreCancelled) {
         return new EventListener<>() {
 
             @Override
@@ -35,10 +38,15 @@ public interface EventListener<E extends Event> extends Comparable<EventListener
             public boolean ignoreCancelled() {
                 return ignoreCancelled;
             }
+
+            @Override
+            public @NonNull Class<E> eventClass() {
+                return eventClass;
+            }
         };
     }
 
-    static <E extends Event> @NonNull EventListener<E> of(@NonNull Consumer<E> eventConsumer, @NonNull ListenerPriority priority, boolean ignoreCancelled) {
-        return of(eventConsumer, priority.getPriority(), ignoreCancelled);
+    static <E extends Event> @NonNull EventListener<E> of(@NonNull Class<E> eventClass, @NonNull Consumer<E> eventConsumer, @NonNull ListenerPriority priority, boolean ignoreCancelled) {
+        return of(eventClass, eventConsumer, priority.getPriority(), ignoreCancelled);
     }
 }
