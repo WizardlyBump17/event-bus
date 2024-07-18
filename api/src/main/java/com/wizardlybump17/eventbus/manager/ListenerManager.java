@@ -8,6 +8,7 @@ import lombok.NonNull;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,6 +39,29 @@ public class ListenerManager {
         } catch (Throwable throwable) {
             throw new RegisterListenerException("An error occurred while trying to add a listener to the event class " + listener.eventClass().getName(), throwable);
         }
+    }
+
+    /**
+     * <p>
+     * Registers all {@link EventListener}s in the provided {@link Iterable}.
+     * If an error occurs while trying to register an {@link EventListener}, a {@link RegisterListenerException} is thrown, but the other {@link EventListener}s are still registered.
+     * </p>
+     *
+     * @param listeners the {@link EventListener}s to register
+     */
+    public void addListeners(@NonNull Iterable<EventListener<?>> listeners) {
+        List<EventListener<?>> failedListeners = new ArrayList<>();
+
+        for (EventListener<?> listener : listeners) {
+            try {
+                addListener(listener);
+            } catch (RegisterListenerException e) {
+                failedListeners.add(listener);
+            }
+        }
+
+        if (!failedListeners.isEmpty())
+            throw new RegisterListenerException("An error occurred while trying to add these listeners: " + failedListeners);
     }
 
     /**
