@@ -1,6 +1,7 @@
 package com.wizardlybump17.eventbus.test;
 
 import com.wizardlybump17.eventbus.listener.EventListener;
+import com.wizardlybump17.eventbus.listener.MethodEventListener;
 import com.wizardlybump17.eventbus.manager.ListenerManager;
 import com.wizardlybump17.eventbus.test.event.CancellableChangeStringEvent;
 import com.wizardlybump17.eventbus.test.event.ChangeStringEvent;
@@ -71,5 +72,16 @@ class EventTests {
                 .build()
         );
         Assertions.assertThrows(UnsupportedOperationException.class, () -> listenerManager.fireEvent(event));
+    }
+
+    @Test
+    void testMethodListeners() {
+        ListenerManager listenerManager = new ListenerManager();
+        listenerManager.addListeners(MethodEventListener.getListeners(new TestObject()));
+
+        ChangeStringEvent event = new ChangeStringEvent("Hello World!");
+        listenerManager.fireEvent(event);
+
+        Assertions.assertEquals("Working", event.getString());
     }
 }
