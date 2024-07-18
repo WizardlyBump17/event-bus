@@ -12,15 +12,16 @@ public class EventListenerList<E extends Event> {
 
     private final @NonNull TreeSet<EventListener<E>> listeners = new TreeSet<>();
 
-    public void addListener(@NonNull EventListener<E> listener) {
-        listeners.add(listener);
+    @SuppressWarnings("unchecked")
+    public void addListener(@NonNull EventListener<?> listener) {
+        listeners.add((EventListener<E>) listener);
     }
 
-    public void removeListener(@NonNull EventListener<E> listener) {
+    public void removeListener(@NonNull EventListener<?> listener) {
         listeners.remove(listener);
     }
 
-    public boolean hasListener(@NonNull EventListener<E> listener) {
+    public boolean hasListener(@NonNull EventListener<?> listener) {
         return listeners.contains(listener);
     }
 
