@@ -8,8 +8,12 @@ import lombok.NonNull;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ListenerManager {
+
+    private final @NonNull List<EventListenerList<?>> allListenerLists = new LinkedList<>();
 
     /**
      * <p>
@@ -25,6 +29,8 @@ public class ListenerManager {
         try {
             EventListenerList<?> listeners = (EventListenerList<?>) MethodHandles.lookup().findStatic(listener.eventClass(), "getListenersList", MethodType.methodType(EventListenerList.class)).invoke();
             listeners.addListener(listener);
+
+            allListenerLists.add(listeners);
         } catch (NoSuchMethodException e) {
             throw new RegisterListenerException("The event class " + listener.eventClass().getName() + " does not have a public static method called getListenersList that returns an EventListenerList instance", e);
         } catch (IllegalAccessException e) {
@@ -45,5 +51,11 @@ public class ListenerManager {
      */
     public boolean fireEvent(@NonNull Event event) {
         return event.getListenerList().fireEvent(event);
+    }
+
+    public void clearListeners() {
+        for (EventListenerList<?> listenerList : allListenerLists)
+            listenerList.clear();
+        allListenerLists.clear();
     }
 }
