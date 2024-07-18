@@ -37,6 +37,8 @@ public class EventListenerList<E extends Event> {
     /**
      * <p>
      * Iterates over all the {@link EventListener}s and calls the {@link EventListener#listen(Event)} method.
+     * If the {@link EventListener#ignoreCancelled()} returns {@code true} and the {@link Event} is cancelled,
+     * the listener will not be called.
      * </p>
      *
      * @param event the {@link Event} to fire
@@ -44,7 +46,8 @@ public class EventListenerList<E extends Event> {
      */
     public boolean fire(@NonNull Event event) {
         for (EventListener<E> listener : listeners)
-            listener.listen(listener.eventClass().cast(event));
+            if (!(event instanceof Cancellable cancellable) || !cancellable.isCancelled() || !listener.ignoreCancelled())
+                listener.listen(listener.eventClass().cast(event));
         return !(event instanceof Cancellable cancellable) || !cancellable.isCancelled();
     }
 }
