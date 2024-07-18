@@ -1,7 +1,6 @@
 package com.wizardlybump17.eventbus.test;
 
 import com.wizardlybump17.eventbus.listener.EventListener;
-import com.wizardlybump17.eventbus.listener.ListenerPriority;
 import com.wizardlybump17.eventbus.manager.ListenerManager;
 import com.wizardlybump17.eventbus.test.event.CancellableChangeStringEvent;
 import com.wizardlybump17.eventbus.test.event.ChangeStringEvent;
@@ -13,14 +12,12 @@ class EventTests {
     @Test
     void testChangeStringEvent() {
         ListenerManager listenerManager = new ListenerManager();
-        listenerManager.addListener(EventListener.of(
-                ChangeStringEvent.class,
-                event -> {
-                    System.out.println("ChangeStringEvent: " + event.getString());
-                },
-                ListenerPriority.NORMAL,
-                false
-        ));
+        listenerManager.addListener(EventListener.<ChangeStringEvent>builder()
+                .eventClass(ChangeStringEvent.class)
+                .eventConsumer(event -> {
+                })
+                .build()
+        );
 
         ChangeStringEvent event = new ChangeStringEvent("Hello World!");
         listenerManager.fireEvent(event);
@@ -30,12 +27,11 @@ class EventTests {
         listenerManager.clearListeners();
         Assertions.assertTrue(listenerManager.isEmpty(), "The ListenerManager should be empty");
 
-        listenerManager.addListener(EventListener.of(
-                ChangeStringEvent.class,
-                stringEvent -> stringEvent.setString("Hello Beautiful World!"),
-                ListenerPriority.NORMAL,
-                false
-        ));
+        listenerManager.addListener(EventListener.<ChangeStringEvent>builder()
+                .eventClass(ChangeStringEvent.class)
+                .eventConsumer(stringEvent -> stringEvent.setString("Hello Beautiful World!"))
+                .build()
+        );
         event = new ChangeStringEvent("Hello World!");
         listenerManager.fireEvent(event);
 
@@ -45,25 +41,35 @@ class EventTests {
     @Test
     void testCancellableChangeStringEvent() {
         ListenerManager listenerManager = new ListenerManager();
-        listenerManager.addListener(EventListener.of(
-                CancellableChangeStringEvent.class,
-                event -> {
+        listenerManager.addListener(EventListener.<CancellableChangeStringEvent>builder()
+                .eventClass(CancellableChangeStringEvent.class)
+                .eventConsumer(event -> {
                     throw new UnsupportedOperationException();
-                },
-                ListenerPriority.NORMAL,
-                true
-        ));
-        listenerManager.addListener(EventListener.of(
-                CancellableChangeStringEvent.class,
-                event -> Assertions.assertEquals("Hello World!", event.getString()),
-                ListenerPriority.NORMAL,
-                false
-        ));
+                })
+                .ignoreCancelled(true)
+                .build()
+        );
+        listenerManager.addListener(EventListener.<CancellableChangeStringEvent>builder()
+                .eventClass(CancellableChangeStringEvent.class)
+                .eventConsumer(event -> {
+                })
+                .build()
+        );
 
         CancellableChangeStringEvent event = new CancellableChangeStringEvent("Hello World!");
         event.setCancelled(true);
-        listenerManager.fireEvent(event);
 
+        Assertions.assertDoesNotThrow(() -> listenerManager.fireEvent(event));
         Assertions.assertTrue(event.isCancelled());
+
+        listenerManager.clearListeners();
+        listenerManager.addListener(EventListener.<CancellableChangeStringEvent>builder()
+                .eventClass(CancellableChangeStringEvent.class)
+                .eventConsumer(stringEvent -> {
+                    throw new UnsupportedOperationException();
+                })
+                .build()
+        );
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> listenerManager.fireEvent(event));
     }
 }
