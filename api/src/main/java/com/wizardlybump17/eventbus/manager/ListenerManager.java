@@ -41,9 +41,9 @@ public class ListenerManager {
      *
      * @param event the {@link Event} to fire
      * @return if the event was cancelled
-     * @see EventListenerList#fire(Event)
+     * @see EventListenerList#fireEvent(Event)
      */
-    public boolean fire(@NonNull Event event) {
-        return event.getListenerList().fire(event);
+    public boolean fireEvent(@NonNull Event event) {
+        return event.getListenerList().fireEvent(event);
     }
 }

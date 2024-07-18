@@ -44,7 +44,7 @@ public class EventListenerList<E extends Event> {
      * @param event the {@link Event} to fire
      * @return if the event was cancelled
      */
-    public boolean fire(@NonNull Event event) {
+    public boolean fireEvent(@NonNull Event event) {
         for (EventListener<E> listener : listeners)
             if (!(event instanceof Cancellable cancellable) || !cancellable.isCancelled() || !listener.ignoreCancelled())
                 listener.listen(listener.eventClass().cast(event));
