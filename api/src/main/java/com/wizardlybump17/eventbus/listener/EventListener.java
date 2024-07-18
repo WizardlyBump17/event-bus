@@ -18,7 +18,7 @@ public interface EventListener<E extends Event> extends Comparable<EventListener
 
     @Override
     default int compareTo(@NonNull EventListener<E> other) {
-        return Integer.compare(other.priority(), priority());
+        return Integer.compare(priority(), other.priority());
     }
 
     @NonNull
