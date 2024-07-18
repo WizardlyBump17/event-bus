@@ -1,6 +1,7 @@
 package com.wizardlybump17.eventbus.test;
 
 import com.wizardlybump17.eventbus.listener.EventListener;
+import com.wizardlybump17.eventbus.listener.ListenerPriority;
 import com.wizardlybump17.eventbus.listener.MethodEventListener;
 import com.wizardlybump17.eventbus.manager.ListenerManager;
 import com.wizardlybump17.eventbus.test.event.CancellableChangeStringEvent;
@@ -83,5 +84,69 @@ class EventTests {
         listenerManager.fireEvent(event);
 
         Assertions.assertEquals("Working", event.getString());
+    }
+
+    @Test
+    void testPriority() {
+        ListenerManager listenerManager = new ListenerManager();
+        listenerManager.addListener(EventListener.<ChangeStringEvent>builder()
+                .eventClass(ChangeStringEvent.class)
+                .eventConsumer(event -> {
+                    Assertions.assertEquals("Hello World!", event.getString());
+                    event.setString("Lowest");
+                })
+                .priority(ListenerPriority.LOWEST)
+                .build()
+        );
+        listenerManager.addListener(EventListener.<ChangeStringEvent>builder()
+                .eventClass(ChangeStringEvent.class)
+                .eventConsumer(event -> {
+                    Assertions.assertEquals("Lowest", event.getString());
+                    event.setString("Low");
+                })
+                .priority(ListenerPriority.LOW)
+                .build()
+        );
+        listenerManager.addListener(EventListener.<ChangeStringEvent>builder()
+                .eventClass(ChangeStringEvent.class)
+                .eventConsumer(event -> {
+                    Assertions.assertEquals("Low", event.getString());
+                    event.setString("Normal");
+                })
+                .priority(ListenerPriority.NORMAL)
+                .build()
+        );
+        listenerManager.addListener(EventListener.<ChangeStringEvent>builder()
+                .eventClass(ChangeStringEvent.class)
+                .eventConsumer(event -> {
+                    Assertions.assertEquals("Normal", event.getString());
+                    event.setString("High");
+                })
+                .priority(ListenerPriority.HIGH)
+                .build()
+        );
+        listenerManager.addListener(EventListener.<ChangeStringEvent>builder()
+                .eventClass(ChangeStringEvent.class)
+                .eventConsumer(event -> {
+                    Assertions.assertEquals("High", event.getString());
+                    event.setString("51");
+                })
+                .priority(51)
+                .build()
+        );
+        listenerManager.addListener(EventListener.<ChangeStringEvent>builder()
+                .eventClass(ChangeStringEvent.class)
+                .eventConsumer(event -> {
+                    Assertions.assertEquals("51", event.getString());
+                    event.setString("Finished");
+                })
+                .priority(ListenerPriority.HIGHEST)
+                .build()
+        );
+
+        ChangeStringEvent event = new ChangeStringEvent("Hello World!");
+        listenerManager.fireEvent(event);
+
+        Assertions.assertEquals("Finished", event.getString());
     }
 }
