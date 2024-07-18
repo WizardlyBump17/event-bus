@@ -58,4 +58,21 @@ public class ListenerManager {
             listenerList.clear();
         allListenerLists.clear();
     }
+
+    /**
+     * <p>
+     * Checks if all known {@link Event}s (i.g. the ones that had an {@link EventListener} added using the {@link #addListener(EventListener)} method)have no listeners
+     * </p>
+     * @return if all known {@link Event}s have no listeners
+     */
+    public boolean isEmpty() {
+        if (allListenerLists.isEmpty())
+            return true;
+
+        for (EventListenerList<?> listenerList : allListenerLists)
+            if (!listenerList.isEmpty())
+                return false;
+
+        return false;
+    }
 }

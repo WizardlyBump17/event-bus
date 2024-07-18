@@ -50,4 +50,8 @@ public class EventListenerList<E extends Event> {
                 listener.listen(listener.eventClass().cast(event));
         return !(event instanceof Cancellable cancellable) || !cancellable.isCancelled();
     }
+
+    public boolean isEmpty() {
+        return listeners.isEmpty();
+    }
 }
