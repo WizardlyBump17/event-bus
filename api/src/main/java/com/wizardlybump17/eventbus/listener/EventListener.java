@@ -50,7 +50,7 @@ public interface EventListener<E extends Event> extends Comparable<EventListener
     }
 
     static <E extends Event> @NonNull EventListener<E> of(@NonNull Class<E> eventClass, @NonNull Consumer<E> eventConsumer, @NonNull ListenerPriority priority, boolean ignoreCancelled) {
-        return of(eventClass, eventConsumer, priority.getPriority(), ignoreCancelled);
+        return of(eventClass, eventConsumer, priority.getValue(), ignoreCancelled);
     }
 
     static <E extends Event> @NonNull Builder<E> builder() {
@@ -71,7 +71,7 @@ public interface EventListener<E extends Event> extends Comparable<EventListener
         private boolean ignoreCancelled;
 
         public @NonNull Builder<E> priority(@NonNull ListenerPriority priority) {
-            this.priority = priority.getPriority();
+            this.priority = priority.getValue();
             return this;
         }
 

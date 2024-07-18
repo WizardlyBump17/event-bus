@@ -19,10 +19,10 @@ public enum ListenerPriority {
     HIGH(50),
     HIGHEST(100);
 
-    private final int priority;
+    private final int value;
 
-    public static @Nullable ListenerPriority getByPriority(int priority) {
-        return switch (priority) {
+    public static @Nullable ListenerPriority getByValue(int value) {
+        return switch (value) {
             case -100 -> LOWEST;
             case -50 -> LOW;
             case 0 -> NORMAL;
