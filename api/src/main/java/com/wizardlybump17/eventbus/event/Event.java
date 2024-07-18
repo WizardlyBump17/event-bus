@@ -26,5 +26,14 @@ public abstract class Event {
         return null;
     }
 
+    /**
+     * <p>
+     * Returns the {@link com.wizardlybump17.eventbus.listener.EventListener}s that are listening to this event.
+     * This method <b>MUST</b> have a {@code public static} equivalent that returns the same value.
+     * </p>
+     *
+     * @return the {@link com.wizardlybump17.eventbus.listener.EventListener} list of this event
+     * @implSpec This method <b>MUST</b> have a {@code public static} equivalent that returns the same value.
+     */
     public abstract @NonNull EventListenerList<? extends Event> getListenerList();
 }
