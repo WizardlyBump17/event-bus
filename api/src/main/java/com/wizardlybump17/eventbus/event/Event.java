@@ -1,4 +1,4 @@
-package com.wizardlybump17.eventbus;
+package com.wizardlybump17.eventbus.event;
 
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,6 +1,6 @@
 package com.wizardlybump17.eventbus.listener;
 
-import com.wizardlybump17.eventbus.Event;
+import com.wizardlybump17.eventbus.event.Event;
 import lombok.NonNull;
 
 import java.util.function.Consumer;

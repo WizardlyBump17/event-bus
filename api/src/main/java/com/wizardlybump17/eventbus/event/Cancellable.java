@@ -1,4 +1,4 @@
-package com.wizardlybump17.eventbus;
+package com.wizardlybump17.eventbus.event;
 
 public interface Cancellable {
 
