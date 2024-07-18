@@ -9,7 +9,7 @@ import lombok.NonNull;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 
-public class EventManager {
+public class ListenerManager {
 
     /**
      * <p>
