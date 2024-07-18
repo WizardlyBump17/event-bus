@@ -49,7 +49,7 @@ public class ListenerManager {
      *
      * @param listeners the {@link EventListener}s to register
      */
-    public void addListeners(@NonNull Iterable<EventListener<?>> listeners) {
+    public void addListeners(@NonNull Iterable<? extends EventListener<?>> listeners) {
         List<EventListener<?>> failedListeners = new ArrayList<>();
 
         for (EventListener<?> listener : listeners) {
