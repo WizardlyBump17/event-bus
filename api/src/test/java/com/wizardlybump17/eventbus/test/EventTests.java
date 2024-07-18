@@ -22,8 +22,22 @@ class EventTests {
         ));
 
         ChangeStringEvent event = new ChangeStringEvent("Hello World!");
-        listenerManager.fire(event);
+        listenerManager.fireEvent(event);
 
         Assertions.assertEquals("Hello World!", event.getString());
+
+        listenerManager.clearListeners();
+        Assertions.assertTrue(listenerManager.isEmpty(), "The ListenerManager should be empty");
+
+        listenerManager.addListener(EventListener.of(
+                ChangeStringEvent.class,
+                stringEvent -> stringEvent.setString("Hello Beautiful World!"),
+                ListenerPriority.NORMAL,
+                false
+        ));
+        event = new ChangeStringEvent("Hello World!");
+        listenerManager.fireEvent(event);
+
+        Assertions.assertEquals("Hello Beautiful World!", event.getString());
     }
 }
