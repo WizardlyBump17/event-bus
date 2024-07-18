@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public record MethodEventListener<E extends Event>(@NonNull Class<E> eventClass, @NonNull MethodHandle methodHandle, int priority, boolean ignoreCancelled) implements EventListener<E> {
+public record MethodEventListener<E extends Event>(@NonNull Class<E> eventClass, @NonNull MethodHandle methodHandle, @NonNull Object object, int priority, boolean ignoreCancelled) implements EventListener<E> {
 
     public static final @NonNull Logger LOGGER = Logger.getLogger("MethodEventListener");
 
     @Override
     public void listen(@NonNull E event) {
         try {
-            methodHandle.invoke(event);
+            methodHandle.invokeWithArguments(object, event);
         } catch (Throwable throwable) {
             LOGGER.log(Level.SEVERE, "Error while invoking the method", throwable);
         }
@@ -52,7 +52,7 @@ public record MethodEventListener<E extends Event>(@NonNull Class<E> eventClass,
                 continue;
             }
 
-            MethodEventListener<?> eventListener = new MethodEventListener<>((Class<? extends Event>) parameters[0], handle, priority, listener.ignoreCancelled());
+            MethodEventListener<?> eventListener = new MethodEventListener<>((Class<? extends Event>) parameters[0], handle, object, priority, listener.ignoreCancelled());
             listeners.add(eventListener);
         }
 
