@@ -53,12 +53,17 @@ class EventTests {
                 ListenerPriority.NORMAL,
                 true
         ));
+        listenerManager.addListener(EventListener.of(
+                CancellableChangeStringEvent.class,
+                event -> Assertions.assertEquals("Hello World!", event.getString()),
+                ListenerPriority.NORMAL,
+                false
+        ));
 
         CancellableChangeStringEvent event = new CancellableChangeStringEvent("Hello World!");
         event.setCancelled(true);
         listenerManager.fireEvent(event);
 
-        Assertions.assertEquals("Hello World!", event.getString());
         Assertions.assertTrue(event.isCancelled());
     }
 }
