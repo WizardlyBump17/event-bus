@@ -70,6 +70,16 @@ public interface EventListener<E extends Event> extends Comparable<EventListener
         private int priority;
         private boolean ignoreCancelled;
 
+        public @NonNull Builder<E> priority(@NonNull ListenerPriority priority) {
+            this.priority = priority.getPriority();
+            return this;
+        }
+
+        public @NonNull Builder<E> priority(int priority) {
+            this.priority = priority;
+            return this;
+        }
+
         public @NonNull BasicEventListener<E> build() {
             return new BasicEventListener<>(eventClass, eventConsumer, priority, ignoreCancelled);
         }
