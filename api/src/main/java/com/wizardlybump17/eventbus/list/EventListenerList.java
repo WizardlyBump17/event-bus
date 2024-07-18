@@ -1,5 +1,6 @@
 package com.wizardlybump17.eventbus.list;
 
+import com.wizardlybump17.eventbus.event.Cancellable;
 import com.wizardlybump17.eventbus.event.Event;
 import com.wizardlybump17.eventbus.listener.EventListener;
 import lombok.NonNull;
@@ -33,8 +34,17 @@ public class EventListenerList<E extends Event> {
         return Collections.unmodifiableSortedSet(listeners);
     }
 
-    public void fire(@NonNull Event event) {
+    /**
+     * <p>
+     * Iterates over all the {@link EventListener}s and calls the {@link EventListener#listen(Event)} method.
+     * </p>
+     *
+     * @param event the {@link Event} to fire
+     * @return if the event was cancelled
+     */
+    public boolean fire(@NonNull Event event) {
         for (EventListener<E> listener : listeners)
             listener.listen(listener.eventClass().cast(event));
+        return !(event instanceof Cancellable cancellable) || !cancellable.isCancelled();
     }
 }

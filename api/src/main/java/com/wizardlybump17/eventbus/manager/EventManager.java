@@ -13,10 +13,11 @@ public class EventManager {
 
     /**
      * <p>
-     *     Adds an {@link EventListener} to the {@link Event} class that the listener listens to.
-     *     It is achieved by invoking the {@code getListenersList} static method of the {@link Event} class.
-     *     If that method is not found, a {@link RegisterListenerException} is thrown.
+     * Adds an {@link EventListener} to the {@link Event} class that the listener listens to.
+     * It is achieved by invoking the {@code getListenersList} static method of the {@link Event} class.
+     * If that method is not found, a {@link RegisterListenerException} is thrown.
      * </p>
+     *
      * @param listener the listener to add
      * @throws RegisterListenerException if the {@code getListenersList} method is not found, is not accessible or an error occurs while trying to add the listener
      */
@@ -33,7 +34,16 @@ public class EventManager {
         }
     }
 
-    public void fire(@NonNull Event event) {
-        event.getListenerList().fire(event);
+    /**
+     * <p>
+     * Calls the {@link EventListener#listen(Event)} method of all {@link EventListener}s in the {@link Event#getListenerList()} of the event.
+     * </p>
+     *
+     * @param event the {@link Event} to fire
+     * @return if the event was cancelled
+     * @see EventListenerList#fire(Event)
+     */
+    public boolean fire(@NonNull Event event) {
+        return event.getListenerList().fire(event);
     }
 }
