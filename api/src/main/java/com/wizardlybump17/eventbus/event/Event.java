@@ -36,4 +36,8 @@ public abstract class Event {
      * @implSpec This method <b>MUST</b> have a {@code public static} equivalent that returns the same value.
      */
     public abstract @NonNull EventListenerList<? extends Event> getListenerList();
+
+    public boolean fireEvent() {
+        return getListenerList().fireEvent(this);
+    }
 }
