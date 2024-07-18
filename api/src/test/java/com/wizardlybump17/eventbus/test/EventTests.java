@@ -1,5 +1,6 @@
 package com.wizardlybump17.eventbus.test;
 
+import com.wizardlybump17.eventbus.annotation.Listener;
 import com.wizardlybump17.eventbus.listener.EventListener;
 import com.wizardlybump17.eventbus.listener.ListenerPriority;
 import com.wizardlybump17.eventbus.listener.MethodEventListener;
@@ -138,15 +139,31 @@ class EventTests {
                 .eventClass(ChangeStringEvent.class)
                 .eventConsumer(event -> {
                     Assertions.assertEquals("51", event.getString());
-                    event.setString("Finished");
+                    event.setString("Highest");
                 })
                 .priority(ListenerPriority.HIGHEST)
                 .build()
         );
+        listenerManager.addListeners(MethodEventListener.getListeners(new PriorityTest()));
 
         ChangeStringEvent event = new ChangeStringEvent("Hello World!");
         listenerManager.fireEvent(event);
 
         Assertions.assertEquals("Finished", event.getString());
+    }
+
+    public static class PriorityTest {
+
+        @Listener(intPriority = 101)
+        public void onChangeString(ChangeStringEvent event) {
+            Assertions.assertEquals("Highest", event.getString());
+            event.setString("101");
+        }
+
+        @Listener(intPriority = 102)
+        public void onChangeString2(ChangeStringEvent event) {
+            Assertions.assertEquals("101", event.getString());
+            event.setString("Finished");
+        }
     }
 }
