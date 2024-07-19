@@ -23,6 +23,13 @@ subprojects {
     tasks {
         test {
             useJUnitPlatform()
+            testLogging {
+                events("passed", "skipped", "failed", "standardOut", "standardError")
+            }
+        }
+
+        build {
+            dependsOn(test)
         }
     }
 }
