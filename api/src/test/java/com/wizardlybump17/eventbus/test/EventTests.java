@@ -1,6 +1,7 @@
 package com.wizardlybump17.eventbus.test;
 
 import com.wizardlybump17.eventbus.annotation.Listener;
+import com.wizardlybump17.eventbus.listener.BasicEventListener;
 import com.wizardlybump17.eventbus.listener.EventListener;
 import com.wizardlybump17.eventbus.listener.ListenerPriority;
 import com.wizardlybump17.eventbus.listener.MethodEventListener;
@@ -165,5 +166,28 @@ class EventTests {
             Assertions.assertEquals("101", event.getString());
             event.setString("Finished");
         }
+    }
+
+    @Test
+    void testRemoveListeners() {
+        ListenerManager manager = new ListenerManager();
+
+        BasicEventListener<ChangeStringEvent> listener1 = EventListener.<ChangeStringEvent>builder()
+                .eventClass(ChangeStringEvent.class)
+                .eventConsumer(event -> {
+                })
+                .build();
+        BasicEventListener<ChangeStringEvent> listener2 = EventListener.<ChangeStringEvent>builder()
+                .eventClass(ChangeStringEvent.class)
+                .eventConsumer(event -> event.setString("Hello World!"))
+                .build();
+
+        manager.addListener(listener1);
+        manager.addListener(listener2);
+
+        manager.removeListener(listener1);
+        manager.removeListener(listener2);
+
+        Assertions.assertTrue(manager.isEmpty(), "The ListenerManager should be empty");
     }
 }

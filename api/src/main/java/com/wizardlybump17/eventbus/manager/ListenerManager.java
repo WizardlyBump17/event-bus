@@ -85,4 +85,16 @@ public class ListenerManager {
 
         return true;
     }
+
+    public void removeListener(@NonNull EventListener<?> listener) {
+        listeners.computeIfPresent(listener.eventClass(), ($, listeners) -> {
+            listeners.remove(listener);
+            return listeners.isEmpty() ? null : listeners;
+        });
+    }
+
+    public void removeListeners(@NonNull Iterable<? extends EventListener<?>> listeners) {
+        for (EventListener<?> listener : listeners)
+            removeListener(listener);
+    }
 }
