@@ -31,5 +31,10 @@ subprojects {
         build {
             dependsOn(test)
         }
+
+        compileJava {
+            options.encoding = Charsets.UTF_8.name()
+            options.release.set(17)
+        }
     }
 }
