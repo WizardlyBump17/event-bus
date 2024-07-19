@@ -5,10 +5,7 @@ import com.wizardlybump17.eventbus.event.Event;
 import com.wizardlybump17.eventbus.listener.EventListener;
 import lombok.NonNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ListenerManager {
 
@@ -96,5 +93,17 @@ public class ListenerManager {
     public void removeListeners(@NonNull Iterable<? extends EventListener<?>> listeners) {
         for (EventListener<?> listener : listeners)
             removeListener(listener);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <E extends Event> @NonNull List<EventListener<E>> getListeners(@NonNull Class<E> eventType) {
+        List<EventListener<?>> listeners = this.listeners.get(eventType);
+        if (listeners == null)
+            return Collections.emptyList();
+        return (List<EventListener<E>>) (Object) Collections.unmodifiableList(listeners);
+    }
+
+    public @NonNull Map<Class<? extends Event>, List<EventListener<?>>> getListeners() {
+        return Collections.unmodifiableMap(listeners);
     }
 }
