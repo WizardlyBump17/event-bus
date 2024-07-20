@@ -46,7 +46,7 @@ public class ListenerManager {
     public boolean fireEvent(@NonNull Event event) {
         List<EventListener<?>> eventListeners = listeners.get(event.getClass());
         if (eventListeners == null)
-            return false;
+            return true;
 
         boolean cancelled = event instanceof Cancellable cancellable && cancellable.isCancelled();
         for (EventListener<?> listener : eventListeners) {
