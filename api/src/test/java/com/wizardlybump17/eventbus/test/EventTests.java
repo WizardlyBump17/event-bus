@@ -189,6 +189,14 @@ class EventTests {
         clearPriorityValues();
     }
 
+    @Test
+    void testEmptyListenerManager() {
+        ListenerManager listenerManager = new ListenerManager();
+        ChangeStringEvent event = new ChangeStringEvent("Hello World");
+        Assertions.assertTrue(listenerManager.fireEvent(event));
+        Assertions.assertEquals("Hello World", event.getString());
+    }
+
     public static class PriorityTest {
 
         @Listener(intPriority = 101)
