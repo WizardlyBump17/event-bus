@@ -1,10 +1,12 @@
 plugins {
     id("java")
     id("io.freefair.lombok") version "8.6" apply false
+    id("maven-publish")
 }
 
 allprojects {
     apply(plugin = "java")
+    apply(plugin = "maven-publish")
 }
 
 subprojects {
@@ -47,6 +49,24 @@ subprojects {
                 this as StandardJavadocDocletOptions
                 addBooleanOption("Xdoclint:none", true)
                 addStringOption("Xmaxwarns", "1")
+            }
+        }
+
+        publishing {
+            repositories {
+                maven {
+                    url = uri("https://maven.pkg.github.com/WizardlyBump17/event-bus")
+                    credentials {
+                        username = (project.findProperty("gpr.user") ?: System.getenv("USERNAME")) as String
+                        password = (project.findProperty("gpr.key") ?: System.getenv("TOKEN")) as String
+                    }
+                }
+            }
+
+            publications {
+                create<MavenPublication>("maven") {
+                    from(project.components["java"])
+                }
             }
         }
     }
