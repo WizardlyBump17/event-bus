@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("io.freefair.lombok") version "8.6" apply false
 }
 
 allprojects {
@@ -35,6 +36,18 @@ subprojects {
         compileJava {
             options.encoding = Charsets.UTF_8.name()
             options.release.set(17)
+        }
+
+        java {
+            withSourcesJar()
+        }
+
+        javadoc {
+            options {
+                this as StandardJavadocDocletOptions
+                addBooleanOption("Xdoclint:none", true)
+                addStringOption("Xmaxwarns", "1")
+            }
         }
     }
 }

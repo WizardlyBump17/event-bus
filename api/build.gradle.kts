@@ -1,3 +1,5 @@
+apply(plugin = "io.freefair.lombok")
+
 version = "0.1.0"
 
 val lombok = "1.18.34"
@@ -10,4 +12,15 @@ dependencies {
     testAnnotationProcessor("org.projectlombok:lombok:${lombok}")
 
     implementation("org.jetbrains:annotations:${jetbrainsAnnotations}")
+}
+
+tasks {
+    javadoc {
+        options {
+            dependsOn(getTasksByName("delombok", false))
+            this as StandardJavadocDocletOptions
+            addStringOption("link", "https://projectlombok.org/api/")
+            addStringOption("link ", "https://javadoc.io/doc/org.jetbrains/annotations/${jetbrainsAnnotations}/")
+        }
+    }
 }
