@@ -1,6 +1,7 @@
 package com.wizardlybump17.eventbus.listener;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,13 +14,17 @@ import org.jetbrains.annotations.Nullable;
 @Getter
 public enum ListenerPriority {
 
-    LOWEST(-100),
-    LOW(-50),
-    NORMAL(0),
-    HIGH(50),
-    HIGHEST(100);
+    LOWEST(Integer.getInteger(ListenerPriority.class.getName() + ".LOWEST-priority", -100)),
+    LOW(Integer.getInteger(ListenerPriority.class.getName() + ".LOW-priority", -50)),
+    NORMAL(Integer.getInteger(ListenerPriority.class.getName() + ".NORMAL-priority", 0)),
+    HIGH(Integer.getInteger(ListenerPriority.class.getName() + ".HIGH-priority", 50)),
+    HIGHEST(Integer.getInteger(ListenerPriority.class.getName() + ".HIGHEST-priority", 100));
 
     private final int value;
+
+    public @NonNull String getPropertyKey() {
+        return getClass().getName() + "." + name() + "-priority";
+    }
 
     public static @Nullable ListenerPriority getByValue(int value) {
         return switch (value) {

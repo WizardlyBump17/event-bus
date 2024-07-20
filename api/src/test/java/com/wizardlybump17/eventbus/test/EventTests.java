@@ -153,6 +153,42 @@ class EventTests {
         Assertions.assertEquals("Finished", event.getString());
     }
 
+    @Test
+    void testPriorityDefaultValues() {
+        clearPriorityValues();
+
+        Assertions.assertEquals(-100, ListenerPriority.LOWEST.getValue());
+        Assertions.assertEquals(-50, ListenerPriority.LOW.getValue());
+        Assertions.assertEquals(0, ListenerPriority.NORMAL.getValue());
+        Assertions.assertEquals(50, ListenerPriority.HIGH.getValue());
+        Assertions.assertEquals(100, ListenerPriority.HIGHEST.getValue());
+    }
+
+    static void clearPriorityValues() {
+        System.clearProperty(ListenerPriority.LOWEST.getPropertyKey());
+        System.clearProperty(ListenerPriority.LOW.getPropertyKey());
+        System.clearProperty(ListenerPriority.NORMAL.getPropertyKey());
+        System.clearProperty(ListenerPriority.HIGH.getPropertyKey());
+        System.clearProperty(ListenerPriority.HIGHEST.getPropertyKey());
+    }
+
+    @Test
+    void testCustomPriorityValues() {
+        System.setProperty(ListenerPriority.LOWEST.getPropertyKey(), "1");
+        System.setProperty(ListenerPriority.LOW.getPropertyKey(), "2");
+        System.setProperty(ListenerPriority.NORMAL.getPropertyKey(), "3");
+        System.setProperty(ListenerPriority.HIGH.getPropertyKey(), "4");
+        System.setProperty(ListenerPriority.HIGHEST.getPropertyKey(), "5");
+
+        Assertions.assertEquals(1, ListenerPriority.LOWEST.getValue());
+        Assertions.assertEquals(2, ListenerPriority.LOW.getValue());
+        Assertions.assertEquals(3, ListenerPriority.NORMAL.getValue());
+        Assertions.assertEquals(4, ListenerPriority.HIGH.getValue());
+        Assertions.assertEquals(5, ListenerPriority.HIGHEST.getValue());
+
+        clearPriorityValues();
+    }
+
     public static class PriorityTest {
 
         @Listener(intPriority = 101)
