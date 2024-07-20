@@ -33,4 +33,16 @@ tasks {
             addStringOption("link  ", "https://javadoc.io/doc/org.jetbrains/annotations/${jetbrainsAnnotations}/")
         }
     }
+
+    assemble {
+        dependsOn(reobfJar)
+    }
+
+    publishing {
+        publications {
+            getByName<MavenPublication>("maven") {
+                artifact(reobfJar)
+            }
+        }
+    }
 }
