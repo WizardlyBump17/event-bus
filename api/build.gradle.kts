@@ -1,6 +1,6 @@
 apply(plugin = "io.freefair.lombok")
 
-version = "0.1.2"
+version = "0.1.3"
 
 val lombok = "1.18.34"
 val jetbrainsAnnotations = "24.1.0"
