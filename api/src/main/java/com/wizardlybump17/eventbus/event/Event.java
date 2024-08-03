@@ -1,5 +1,6 @@
 package com.wizardlybump17.eventbus.event;
 
+import com.wizardlybump17.eventbus.manager.ListenerManager;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,5 +24,17 @@ public abstract class Event {
      */
     public @Nullable String getDescription() {
         return null;
+    }
+
+    /**
+     * <p>
+     * Calls the {@link ListenerManager#fireEvent(Event)} method of the provided {@link ListenerManager} with {@code this} {@link Event}.
+     * </p>
+     *
+     * @param listenerManager the {@link ListenerManager} to call {@code this} {@link Event}
+     * @return if the {@code this} {@link Event} was not cancelled
+     */
+    public boolean fire(@NonNull ListenerManager listenerManager) {
+        return listenerManager.fireEvent(this);
     }
 }

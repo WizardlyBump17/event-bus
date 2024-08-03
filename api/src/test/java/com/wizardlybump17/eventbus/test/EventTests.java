@@ -197,6 +197,27 @@ class EventTests {
         Assertions.assertEquals("Hello World", event.getString());
     }
 
+    @Test
+    void testFireEventMethod() {
+        ListenerManager listenerManager = new ListenerManager();
+        listenerManager.addListener(EventListener.<ChangeStringEvent>builder()
+                .eventClass(ChangeStringEvent.class)
+                .eventConsumer(event -> {
+                })
+                .build()
+        );
+
+        ChangeStringEvent event1 = new ChangeStringEvent("Hello World");
+        Assertions.assertTrue(event1.fire(listenerManager));
+
+        CancellableChangeStringEvent event2 = new CancellableChangeStringEvent("Hello World 2");
+        Assertions.assertTrue(event2.fire(listenerManager));
+
+        CancellableChangeStringEvent event3 = new CancellableChangeStringEvent("Hello World 3");
+        event3.setCancelled(true);
+        Assertions.assertFalse(event3.fire(listenerManager));
+    }
+
     public static class PriorityTest {
 
         @Listener(intPriority = 101)
